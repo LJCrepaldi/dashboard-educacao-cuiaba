@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Estatístico - Rede Municipal de Ensino de Cuiabá</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-950/70 backdrop-blur sticky top-0 z-40 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></span>
+        <h1 class="text-xl font-bold tracking-tight text-white">Dashboard Estatístico da Educação</h1>
+      </div>
+      <p class="text-xs text-slate-400">Secretaria Municipal de Educação de Cuiabá (SME) • Dados Oficiais</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="bg-slate-800 text-xs px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300">
+        Total RME: <strong class="text-emerald-400">58.737 alunos</strong>
+      </span>
+      <span class="bg-slate-800 text-xs px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300">
+        RME + Filantrópicas: <strong class="text-sky-400">60.911</strong>
+      </span>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-6 space-y-6">
+
+    <!-- KPI Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-4 shadow-sm">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Matrículas na RME</p>
+        <p class="text-3xl font-extrabold text-emerald-400 mt-2">58.737</p>
+        <div class="mt-2 text-xs text-slate-400 flex justify-between">
+          <span>Masc: 30.267 (51,5%)</span>
+          <span>Fem: 28.470 (48,5%)</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-4 shadow-sm">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Unidades Escolares</p>
+        <p class="text-3xl font-extrabold text-sky-400 mt-2">172</p>
+        <div class="mt-2 text-xs text-slate-400 flex justify-between">
+          <span>83 EMEB • 56 CEIC</span>
+          <span>23 CMEI • 8 EMEBC</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-4 shadow-sm">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Alunos Estrangeiros</p>
+        <p class="text-3xl font-extrabold text-amber-400 mt-2">1.560</p>
+        <div class="mt-2 text-xs text-slate-400 flex justify-between">
+          <span>78,6% Venezuela (1.224)</span>
+          <span>Haiti: 106 • Bolívia: 54</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-4 shadow-sm">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Fila Creche (Reprimida)</p>
+        <p class="text-3xl font-extrabold text-rose-400 mt-2">1.684</p>
+        <div class="mt-2 text-xs text-slate-400 flex justify-between">
+          <span>Berçário (G0): 650 (38,6%)</span>
+          <span>Maternal: 497 (29,5%)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gráficos Principais -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Regiões -->
+      <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-5">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-200">Matrículas por Região</h2>
+          <span class="text-xs text-slate-400">Regional Sul lidera com 36,6%</span>
+        </div>
+        <div class="h-64">
+          <canvas id="regionalChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Turnos -->
+      <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-5">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-200">Distribuição por Turno</h2>
+          <span class="text-xs text-slate-400">Integral representa 21,35%</span>
+        </div>
+        <div class="h-64">
+          <canvas id="turnosChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Segunda Linha de Gráficos -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Etapas de Ensino -->
+      <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-5 lg:col-span-2">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-200">Distribuição por Série / Ano Escolar</h2>
+          <span class="text-xs text-slate-400">Ensino Fundamental: 34.528 alunos</span>
+        </div>
+        <div class="h-72">
+          <canvas id="etapasChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Demanda Reprimida Creche -->
+      <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-5">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-200">Fila na Fase Creche</h2>
+          <span class="text-xs text-rose-400">1.684 pedidos</span>
+        </div>
+        <div class="h-72">
+          <canvas id="crecheChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabela Detalhada com Busca -->
+    <section class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-5">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4">
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-200">Matrículas Detalhadas por Regional e Fase</h2>
+          <p class="text-xs text-slate-400">Resumo consolidado por segmento educacional</p>
+        </div>
+        <input 
+          id="searchInput" 
+          type="text" 
+          placeholder="Filtrar por etapa ou série..." 
+          class="bg-slate-900 border border-slate-700 text-xs rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500 w-full md:w-64"
+          onkeyup="filterTable()"
+        >
+      </div>
+
+      <div class="overflow-x-auto">
+        <table id="dataTable" class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-700 text-slate-400 uppercase bg-slate-900/50">
+              <th class="p-3">Etapa</th>
+              <th class="p-3">Fase / Ano</th>
+              <th class="p-3 text-right">Leste</th>
+              <th class="p-3 text-right">Norte</th>
+              <th class="p-3 text-right">Oeste</th>
+              <th class="p-3 text-right">Sul</th>
+              <th class="p-3 text-right">Rural</th>
+              <th class="p-3 text-right font-bold text-emerald-400">Total RME</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-300">
+            <tr><td class="p-3">Creche</td><td class="p-3">G0 - Berçário</td><td class="p-3 text-right">255</td><td class="p-3 text-right">299</td><td class="p-3 text-right">89</td><td class="p-3 text-right">429</td><td class="p-3 text-right">27</td><td class="p-3 text-right font-bold text-emerald-400">1.099</td></tr>
+            <tr><td class="p-3">Creche</td><td class="p-3">G1 - Maternal</td><td class="p-3 text-right">730</td><td class="p-3 text-right">773</td><td class="p-3 text-right">276</td><td class="p-3 text-right">876</td><td class="p-3 text-right">30</td><td class="p-3 text-right font-bold text-emerald-400">2.685</td></tr>
+            <tr><td class="p-3">Creche</td><td class="p-3">G2 - Jardim I</td><td class="p-3 text-right">960</td><td class="p-3 text-right">1.089</td><td class="p-3 text-right">394</td><td class="p-3 text-right">1.304</td><td class="p-3 text-right">32</td><td class="p-3 text-right font-bold text-emerald-400">3.779</td></tr>
+            <tr><td class="p-3">Creche</td><td class="p-3">G3 - Jardim II</td><td class="p-3 text-right">1.134</td><td class="p-3 text-right">1.226</td><td class="p-3 text-right">397</td><td class="p-3 text-right">1.520</td><td class="p-3 text-right">37</td><td class="p-3 text-right font-bold text-emerald-400">4.314</td></tr>
+            <tr><td class="p-3">Pré-Escola</td><td class="p-3">G4 - Pré Escola I</td><td class="p-3 text-right">1.463</td><td class="p-3 text-right">1.311</td><td class="p-3 text-right">703</td><td class="p-3 text-right">2.298</td><td class="p-3 text-right">274</td><td class="p-3 text-right font-bold text-emerald-400">6.049</td></tr>
+            <tr><td class="p-3">Pré-Escola</td><td class="p-3">G5 - Pré Escola II</td><td class="p-3 text-right">1.511</td><td class="p-3 text-right">1.306</td><td class="p-3 text-right">740</td><td class="p-3 text-right">2.352</td><td class="p-3 text-right">262</td><td class="p-3 text-right font-bold text-emerald-400">6.171</td></tr>
+            <tr><td class="p-3">Anos Iniciais</td><td class="p-3">1º Ano</td><td class="p-3 text-right">1.592</td><td class="p-3 text-right">1.531</td><td class="p-3 text-right">825</td><td class="p-3 text-right">2.407</td><td class="p-3 text-right">295</td><td class="p-3 text-right font-bold text-emerald-400">6.650</td></tr>
+            <tr><td class="p-3">Anos Iniciais</td><td class="p-3">2º Ano</td><td class="p-3 text-right">1.706</td><td class="p-3 text-right">1.614</td><td class="p-3 text-right">774</td><td class="p-3 text-right">2.576</td><td class="p-3 text-right">333</td><td class="p-3 text-right font-bold text-emerald-400">7.003</td></tr>
+            <tr><td class="p-3">Anos Iniciais</td><td class="p-3">3º Ano</td><td class="p-3 text-right">1.635</td><td class="p-3 text-right">1.595</td><td class="p-3 text-right">832</td><td class="p-3 text-right">2.596</td><td class="p-3 text-right">304</td><td class="p-3 text-right font-bold text-emerald-400">6.962</td></tr>
+            <tr><td class="p-3">Anos Iniciais</td><td class="p-3">4º Ano</td><td class="p-3 text-right">1.607</td><td class="p-3 text-right">1.429</td><td class="p-3 text-right">831</td><td class="p-3 text-right">2.570</td><td class="p-3 text-right">301</td><td class="p-3 text-right font-bold text-emerald-400">6.738</td></tr>
+            <tr><td class="p-3">Anos Iniciais</td><td class="p-3">5º Ano</td><td class="p-3 text-right">1.701</td><td class="p-3 text-right">1.651</td><td class="p-3 text-right">875</td><td class="p-3 text-right">2.590</td><td class="p-3 text-right">358</td><td class="p-3 text-right font-bold text-emerald-400">7.175</td></tr>
+          </tbody>
+          <tfoot>
+            <tr class="border-t-2 border-slate-700 bg-slate-900/80 font-bold text-emerald-300">
+              <td class="p-3" colspan="2">TOTAL GERAL RME</td>
+              <td class="p-3 text-right">14.337</td>
+              <td class="p-3 text-right">13.824</td>
+              <td class="p-3 text-right">6.800</td>
+              <td class="p-3 text-right">21.518</td>
+              <td class="p-3 text-right">2.258</td>
+              <td class="p-3 text-right">58.737</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Gráfico de Regiões
+    new Chart(document.getElementById('regionalChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Sul', 'Leste', 'Norte', 'Oeste', 'Rural'],
+        datasets: [{
+          label: 'Matrículas',
+          data: [21518, 14337, 13824, 6800, 2258],
+          backgroundColor: ['#10b981', '#38bdf8', '#818cf8', '#f59e0b', '#ec4899'],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+          y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+        }
+      }
+    });
+
+    // Gráfico de Turnos
+    new Chart(document.getElementById('turnosChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Matutino (39,45%)', 'Vespertino (39,19%)', 'Integral (21,35%)', 'Noturno (0,01%)'],
+        datasets: [{
+          data: [23172, 23019, 12541, 5],
+          backgroundColor: ['#38bdf8', '#818cf8', '#10b981', '#64748b']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 11 } } }
+        }
+      }
+    });
+
+    // Gráfico de Etapas
+    new Chart(document.getElementById('etapasChart'), {
+      type: 'line',
+      data: {
+        labels: ['Berçário', 'Maternal', 'Jardim I', 'Jardim II', 'Pré I', 'Pré II', '1º Ano', '2º Ano', '3º Ano', '4º Ano', '5º Ano'],
+        datasets: [{
+          label: 'Total de Alunos',
+          data: [1099, 2685, 3779, 4314, 6049, 6171, 6650, 7003, 6962, 6738, 7175],
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.15)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+          y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+        }
+      }
+    });
+
+    // Gráfico de Fila Creche
+    new Chart(document.getElementById('crecheChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Berçário G0 (38,6%)', 'Maternal G1 (29,5%)', 'Jardim I G2 (17,9%)', 'Jardim II G3 (14,0%)'],
+        datasets: [{
+          data: [650, 497, 301, 236],
+          backgroundColor: ['#f43f5e', '#fb7185', '#fda4af', '#fecdd3']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 10 } } }
+        }
+      }
+    });
+
+    // Filtro da Tabela
+    function filterTable() {
+      const input = document.getElementById("searchInput").value.toUpperCase();
+      const rows = document.querySelectorAll("#dataTable tbody tr");
+      rows.forEach(row => {
+        const text = row.innerText.toUpperCase();
+        row.style.display = text.includes(input) ? "" : "none";
+      });
+    }
+  </script>
+</body>
+</html>
